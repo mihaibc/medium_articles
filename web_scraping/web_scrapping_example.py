@@ -12,11 +12,13 @@ results = []
 # define the url base url
 url = "https://www.livescore.com/en/football/2021-02-08/"
 
-# Make the request
+# Create the options and initialize the web driver 
 options = Options()
 options.add_argument("--headless")
 options.add_argument("--disable-gpu")
 driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
+
+# Make the request
 driver.get(url)
 time.sleep(3)
 page = driver.page_source
@@ -24,8 +26,9 @@ driver.quit()
 
 # Process the response and save it as BeautifulSoup object
 soup = BeautifulSoup(page, "html.parser")
+
 # Looping all the div tags that have "styled__FootballWrapper-sc-1bf0dw1-1 foNXQM" class
-# From the website analysis resulted that the above mentioned class has game data
+# From the website analysis resulted that the above mentioned class has match data
 for match_tag in soup.findAll(
     "div", {"class": "styled__FootballWrapper-sc-1bf0dw1-1 foNXQM"}
 ):
@@ -34,7 +37,7 @@ for match_tag in soup.findAll(
 
     # retrive the home team name
     home_team = match_info[0].find("span", {"class": "team-name"}).string
-    # retrive the home team name
+    # retrive the away team name
     away_team = match_info[0].find("span", {"class": "team-name"}).string
 
     # retrive the score
